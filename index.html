@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -33,9 +34,11 @@
   .price{font:700 30px system-ui,sans-serif;color:var(--gold)}
   .small{font:14px/1.5 system-ui,sans-serif;color:var(--muted)}
   ul.clean{padding-left:20px}
-  table{width:100%;border-collapse:collapse;font:16px system-ui,sans-serif}
-  td,th{padding:10px 6px;border-bottom:1px solid var(--line);text-align:left}
-  td:last-child,th:last-child{text-align:right}
+  .gallery{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .art{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px}
+  .art img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;background:#2a2119}
+  .art .name{font:600 15px/1.3 system-ui,sans-serif;margin:8px 2px 2px}
+  .art .size{font:13px system-ui,sans-serif;color:var(--muted);margin:0 2px 4px}
   .legal h3{color:var(--gold)}
   footer{border-top:1px solid var(--line);padding:30px 0 50px;color:var(--muted);font:15px/1.7 system-ui,sans-serif}
   footer a{margin-right:14px}
@@ -86,21 +89,19 @@
   <div class="wrap">
     <h2>The collection: Vol.1</h2>
     <p>Ten artworks. Each is sold on its own, or you can get the whole set as a bundle.</p>
-    <div class="card">
-      <table>
-        <tr><th>Artwork</th><th>File</th></tr>
-        <tr><td>SC01 Dynamic Jump</td><td>4491 x 6000 px</td></tr>
-        <tr><td>SC02 Night Face</td><td>4491 x 6000 px</td></tr>
-        <tr><td>SC03 Rooftop Spear</td><td>4491 x 6000 px</td></tr>
-        <tr><td>SC04 Tribe Hotel</td><td>4491 x 6000 px</td></tr>
-        <tr><td>SC05 Rainy Street</td><td>4491 x 6000 px</td></tr>
-        <tr><td>SC06 Kenya Marketplace</td><td>4491 x 6000 px</td></tr>
-        <tr><td>SC07 Westgate Mall</td><td>4491 x 6000 px</td></tr>
-        <tr><td>SC08 Java House Neon</td><td>4491 x 6000 px</td></tr>
-        <tr><td>SC09 Portrait</td><td>4130 x 6000 px</td></tr>
-        <tr><td>SC10 Rooftop Dusk</td><td>4491 x 6000 px</td></tr>
-      </table>
+    <div class="gallery">
+      <div class="art"><img data-n="01" alt="SC01 Dynamic Jump, watermarked preview" loading="lazy"><div class="name">SC01 Dynamic Jump</div><div class="size">4491 x 6000 px</div></div>
+      <div class="art"><img data-n="02" alt="SC02 Night Face, watermarked preview" loading="lazy"><div class="name">SC02 Night Face</div><div class="size">4491 x 6000 px</div></div>
+      <div class="art"><img data-n="03" alt="SC03 Rooftop Spear, watermarked preview" loading="lazy"><div class="name">SC03 Rooftop Spear</div><div class="size">4491 x 6000 px</div></div>
+      <div class="art"><img data-n="04" alt="SC04 Tribe Hotel, watermarked preview" loading="lazy"><div class="name">SC04 Tribe Hotel</div><div class="size">4491 x 6000 px</div></div>
+      <div class="art"><img data-n="05" alt="SC05 Rainy Street, watermarked preview" loading="lazy"><div class="name">SC05 Rainy Street</div><div class="size">4491 x 6000 px</div></div>
+      <div class="art"><img data-n="06" alt="SC06 Kenya Marketplace, watermarked preview" loading="lazy"><div class="name">SC06 Kenya Marketplace</div><div class="size">4491 x 6000 px</div></div>
+      <div class="art"><img data-n="07" alt="SC07 Westgate Mall, watermarked preview" loading="lazy"><div class="name">SC07 Westgate Mall</div><div class="size">4491 x 6000 px</div></div>
+      <div class="art"><img data-n="08" alt="SC08 Java House Neon, watermarked preview" loading="lazy"><div class="name">SC08 Java House Neon</div><div class="size">4491 x 6000 px</div></div>
+      <div class="art"><img data-n="09" alt="SC09 Portrait, watermarked preview" loading="lazy"><div class="name">SC09 Portrait</div><div class="size">4130 x 6000 px</div></div>
+      <div class="art"><img data-n="10" alt="SC10 Rooftop Dusk, watermarked preview" loading="lazy"><div class="name">SC10 Rooftop Dusk</div><div class="size">4491 x 6000 px</div></div>
     </div>
+    <p class="small">Previews are watermarked and low resolution. Purchased files are clean, full-size PNGs.</p>
   </div>
 </section>
 
@@ -261,6 +262,27 @@
     <div class="small">&copy; 2026 Modern Maasai Future Nairobi Vol.1. All artwork is protected by copyright. Payments are processed by Creem, merchant of record.</div>
   </div>
 </footer>
+
+<script>
+/* Finds each preview image in this repository by its number (Standalone_01_..., Standalone_02_...) */
+(function(){
+  var api = "https://api.github.com/repos/dougyjerry018-cmyk/maasai-future-nairobi/contents/";
+  fetch(api).then(function(r){ return r.json(); }).then(function(files){
+    if(!Array.isArray(files)) return;
+    var imgs = document.querySelectorAll("img[data-n]");
+    for(var i=0;i<imgs.length;i++){
+      var n = imgs[i].getAttribute("data-n");
+      for(var j=0;j<files.length;j++){
+        var f = files[j].name;
+        if(f.indexOf("Standalone_"+n+"_")===0 && /\.(jpg|jpeg|png|webp)$/i.test(f)){
+          imgs[i].src = "./" + encodeURIComponent(f);
+          break;
+        }
+      }
+    }
+  }).catch(function(){});
+})();
+</script>
 
 </body>
 </html>
